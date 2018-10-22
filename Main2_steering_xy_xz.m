@@ -8,24 +8,24 @@ clearvars;
 addpath('.\Program Files');
 
 c = 343.2;
-bf_freq = 3000;
+bf_freq = 1000;
 x_range = 1/2*[-1 1];
 y_range = 1/2*[-1 1];
 z_bf = 1.0;
 y_bf = 0;
 z_range = 1/2*[-1 1] + z_bf;
 res = 0.01;
-dynamic_range = 25;
+dynamic_range = 12;
 
 load('mic_poses_optim.mat');
 mic_pos = mic_poses.';
 % mic_pos = 2*rand(15,2)-1; 
 % mic_pos(:,3) = 0;
 
-% source_info = [-0.3 0 z_bf bf_freq 100; ...
-%                0.2 0 z_bf bf_freq 100];
+source_info = [-0.3 0 z_bf bf_freq 100; ...
+               0.2 0 z_bf bf_freq 100];
            
-source_info = [0 0 z_bf bf_freq 100];
+% source_info = [0 0 z_bf bf_freq 100];
 
 [p, Fs] = simulateArraydata(source_info, mic_pos, c);
 [CSM, freqs] = developCSM(p.', bf_freq-5, bf_freq+5, Fs, size(p,2)/Fs, 0);
@@ -116,7 +116,7 @@ maxSPL = max(B2Lz(:));
 colorbar; caxis([(maxSPL-dynamic_range) maxSPL]);
 
 B3Lz = 20*log10(sqrt(real(B3z))/2e-5);
-subplot(2,4,7); imagesc(X3,Z3,B3Lz);
+subplot(2,4,7); contourf(X3,Z3,B3Lz,[(maxSPL-dynamic_range):1:maxSPL]);  %imagesc(X3,Z3,B3Lz);
 doScatterSourceXZ;
 axis equal; axis([x_range z_range]);
 xlabel('X');
@@ -125,7 +125,7 @@ maxSPL = max(B3Lz(:));
 colorbar; caxis([(maxSPL-dynamic_range) maxSPL]);
 
 B4Lz = 20*log10(sqrt(real(B4z))/2e-5);
-subplot(2,4,8); imagesc(X4,Z4,B4Lz);
+subplot(2,4,8); contourf(X4,Z4,B4Lz,[(maxSPL-dynamic_range):1:maxSPL]); %imagesc(X4,Z4,B4Lz);
 doScatterSourceXZ;
 axis equal; axis([x_range z_range]);
 xlabel('X');

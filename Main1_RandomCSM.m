@@ -40,8 +40,15 @@ CSM2 = randAmp.*exp(1i*angle(CSM));
 randAng = 2*pi*rand(64,64) - pi;
 randAng = triu(randAng,1) - triu(randAng,1).' ;
 CSM3 = abs(CSM).*exp(1i*randAng);
-[X3, Y3, B3] = FastBeamforming3(CSM3, z_range, freqs, [x_range y_range], ...
+
+
+randAngLittle = (2*pi*rand(64,64) - pi)/2;
+randAngLittle = triu(randAngLittle,1) - triu(randAngLittle,1).' ;
+CSM4 = abs(CSM).*exp(1i*(angle(CSM)+randAngLittle));
+
+[X3, Y3, B3] = FastBeamforming3(CSM4, z_range, freqs, [x_range y_range], ...
                              0.01, mic_pos.', c);
+                         
 %%
 figure('position', [200 200 1500 500]);
 
